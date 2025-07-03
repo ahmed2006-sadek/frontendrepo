@@ -1,0 +1,854 @@
+/* ============================================= */
+/* === GLOBAL & COMPONENT STYLES (App.css)   === */
+/* ============================================= */
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=El+Messiri:wght@400..700&display=swap");
+
+/* --- 1. استيراد متغيرات الثيم --- */
+@import url("./styles/theme.css");
+
+/* إزالة outline من كل العناصر عند الضغط */
+*:focus,
+*:focus-visible,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* يمنع شريط التمرير الأفقي للصفحة بأكملها */
+  overflow-y: auto; /* يسمح بالتمرير العمودي للصفحة بأكملها عند الحاجة */
+}
+
+body {
+  font-family: "Segoe UI", "Cairo", "El Messiri", Arial, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+  line-height: 1.7;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* تأكد أن الـ root يملأ الشاشة عموديا */
+  background: var(--background); /* تأكيد تطبيق الخلفية على الـ root */
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 200px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  z-index: 3000;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  background: var(--sidebar-bg);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0; /* يمنع الانكماش */
+}
+
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* السماح بالتمرير داخل الروابط فقط */
+  flex-shrink: 1; /* يسمح بالانكماش إذا لزم الأمر */
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-text-active);
+  transform: translateX(2px);
+  box-shadow: inset 4px 0 0 var(--primary-color);
+}
+
+.sidebar-link svg {
+  min-width: 18px;
+}
+
+.link-text {
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  display: none;
+}
+
+.sidebar-footer {
+  padding: 14px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  background: var(--sidebar-bg);
+  box-shadow: inset 0 1px 0 var(--shadow-sm);
+  flex-shrink: 0; /* يمنع الانكماش */
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #cf222e; /* لون ثابت لزر الخروج */
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: var(--transition);
+  background: transparent;
+}
+
+.logout-link:hover {
+  background: #cf222e;
+  color: white;
+  border: 1px solid #cf222e;
+}
+
+/* Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2999;
+  backdrop-filter: blur(4px);
+}
+
+/* Mobile toggle button */
+.sidebar-toggle.mobile-button {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 3100;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+}
+
+.sidebar-toggle.mobile-button:hover {
+  background: var(--hover-bg);
+}
+
+/* Main Content Area */
+.main-center {
+  flex: 1;
+  margin-left: 200px; /* يجب أن يتطابق مع عرض الشريط الجانبي */
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-primary);
+  transition: margin-left 0.3s ease;
+  padding: 36px 32px 32px 32px;
+}
+
+.main-center.expanded {
+  margin-left: 70px; /* يجب أن يتطابق مع عرض الشريط الجانبي المطوي */
+}
+
+/* Login Container */
+.login-container {
+  max-width: 420px;
+  width: 100%;
+  padding: 48px 40px 36px 40px;
+  text-align: center;
+  background: var(--card-background);
+  box-shadow: var(--shadow-lg);
+  border-radius: 24px;
+  position: relative;
+  margin: 70px auto 0 auto;
+  border: 1.5px solid var(--border-color);
+  backdrop-filter: blur(8px);
+}
+
+.login-container h2 {
+  color: var(--primary-color);
+  margin-bottom: 32px;
+  font-weight: 900;
+  font-size: 2.2rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(var(--primary-color-rgb),0.08);
+}
+
+.login-msg {
+  display: block;
+  margin-top: 18px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-secondary); /* استخدام متغير للون الرسالة */
+  min-height: 24px;
+}
+.login-msg.success {
+  color: var(--accent-color);
+}
+.login-msg.error {
+  color: #ff6b6b; /* لون ثابت لرسالة الخطأ */
+}
+
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.MuiInputBase-root {
+  border-radius: 12px !important;
+  background: var(--background-alt) !important; /* استخدام متغير */
+  border: 2px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: var(--transition) !important;
+  font-size: 1.1rem !important;
+  font-family: inherit !important;
+}
+
+.MuiInputBase-root:hover {
+  border-color: var(--primary-light) !important;
+}
+
+.MuiInputBase-root.Mui-focused {
+  border-color: var(--primary-color) !important;
+  background: rgba(var(--primary-color-rgb),0.12) !important; /* استخدام متغير */
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.10) !important; /* استخدام متغير */
+}
+
+.MuiInputLabel-root,
+label {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.submit {
+  background-color: var(--primary-color); /* توحيد لون زر Login */
+  color: #fff;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+  margin-top: 24px;
+  margin-bottom: 0;
+  width: 100%;
+  letter-spacing: 0.04em;
+}
+.submit:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Dashboard Profile */
+.dashboard-profile {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  background: var(--primary-color);
+  padding: 16px;
+  border-radius: 50%;
+  display: flex;
+  margin-top: 85px;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.profile-info p {
+  margin: 4px 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-2 {
+  gap: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+/* StatBox styles */
+.stat-box {
+  flex: 1;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+}
+
+.stat-box h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--text-primary); /* استخدام متغير */
+}
+
+.stat-box p {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.box:last-child {
+  border-right: none;
+}
+
+.dashboard-profile {
+  background: var(--card-background);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  padding: 48px 40px 40px;
+  max-width: 500px;
+  margin: 40px auto;
+  position: relative;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.profile-avatar {
+  position: absolute;
+  top: -50px;
+  right: 40px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 4px solid var(--primary-color);
+  background: var(--primary-color);
+}
+
+.profile-info h2 {
+  margin: 60px 0 12px 0;
+  font-size: 2rem;
+  color: var(--primary-light);
+  font-weight: 700;
+}
+
+.profile-info p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* جداول احترافية أكثر */
+.users-table, .leads-table, .inventory-table, .projects-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card-background);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-top: 20px;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.users-table th, .leads-table th, .inventory-table th, .projects-table th {
+  background: var(--table-header-bg);
+  color: var(--text-secondary); /* استخدام متغير */
+  padding: 18px 14px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.07rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--primary-color);
+  border-top: 1px solid var(--border-color);
+}
+
+.users-table td, .leads-table td, .inventory-table td, .projects-table td {
+  color: var(--text-primary);
+  padding: 14px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 500;
+  background: var(--card-background); /* استخدام متغير */
+  transition: background 0.18s;
+}
+
+.users-table tr, .leads-table tr, .inventory-table tr, .projects-table tr {
+  transition: background 0.18s;
+}
+
+.users-table tr:hover, .leads-table tr:hover, .inventory-table tr:hover, .projects-table tr:hover {
+  background: var(--table-row-hover);
+}
+
+.users-table th:first-child, .leads-table th:first-child,
+.inventory-table th:first-child, .projects-table th:first-child {
+  border-top-left-radius: 14px;
+}
+.users-table th:last-child, .leads-table th:last-child,
+.inventory-table th:last-child, .projects-table th:last-child {
+  border-top-right-radius: 14px;
+}
+.users-table tr:last-child td:first-child,
+.leads-table tr:last-child td:first-child,
+.inventory-table tr:last-child td:first-child,
+.projects-table tr:last-child td:first-child {
+  border-bottom-left-radius: 14px;
+}
+.users-table tr:last-child td:last-child,
+.leads-table tr:last-child td:last-child,
+.inventory-table tr:last-child td:last-child,
+.projects-table tr:last-child td:last-child {
+  border-bottom-right-radius: 14px;
+}
+
+/* خطوط فاصلة خفيفة بين الأعمدة */
+.users-table td:not(:last-child),
+.leads-table td:not(:last-child),
+.inventory-table td:not(:last-child),
+.projects-table td:not(:last-child) {
+  border-right: 1px solid var(--border-color); /* استخدام متغير */
+}
+
+/* Buttons */
+.add-btn, .edit-btn, .delete-btn, .view-btn, .add-user-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-btn, .add-user-btn {
+  background: var(--primary-color); /* توحيد لون زر Add مع Login */
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.add-btn:hover, .add-user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #6610f2, #4B0082); /* لون نيلي ثابت */
+  color: #fff;
+}
+
+.edit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ff6b6b, #e74c3c); /* لون أحمر ثابت */
+  color: #fff;
+}
+
+.delete-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.view-btn {
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-color)); /* استخدام متغيرات الثيم */
+  color: #fff;
+}
+
+.view-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--background-rgb), 0.7); /* استخدام متغير */
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  min-width: 400px;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: var(--card-background);
+  color: var(--text-primary);
+  padding: 32px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 1.5px solid var(--border-color);
+  overflow-y: auto;
+}
+
+.modal.scrollable {
+  overflow-y: auto;
+}
+
+.modal h3 {
+  margin-bottom: 24px;
+  color: var(--primary-color);
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.modal input, .modal select, .modal textarea,
+input,
+select,
+textarea,
+.modal input,
+.modal select,
+.modal textarea {
+  background: var(--background-alt) !important; /* استخدام متغير */
+  width: 100%;
+  margin: 12px 0;
+  padding: 14px 16px;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--border-color);
+  font-size: 15px;
+  outline: none !important;
+  box-shadow: none !important;
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.modal input:focus, .modal select:focus, .modal textarea:focus {
+  border-color: var(--primary-light);
+  background: rgba(var(--primary-color-rgb),0.12); /* استخدام متغير */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.10); /* استخدام متغير */
+}
+
+.close-x {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 28px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-x:hover {
+  color: red
+}
+
+
+/* Page Containers */
+.users-list-page, .inventory-page, .projects-page, .leads-list-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+  background: var(--card-background);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1.5px solid var(--border-color);
+}
+
+/* تحسين مظهر الـ select boxes (dropdowns) */
+select,
+.modal select,
+.role-dropdown {
+  background: var(--background-alt) !important; /* استخدام متغير */
+  border: 2px solid var(--primary-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  transition: var(--transition) !important;
+  box-shadow: var(--shadow-sm); /* استخدام متغير */
+  appearance: none;
+  outline: none !important;
+  margin-bottom: 12px;
+}
+
+select:focus,
+.modal select:focus,
+.role-dropdown:focus {
+  border-color: var(--primary-light);
+  background: rgba(var(--primary-color-rgb),0.18); /* استخدام متغير */
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.10); /* استخدام متغير */
+}
+
+select option,
+.modal select option,
+.role-dropdown option {
+  color: var(--text-primary) !important; /* استخدام متغير */
+  background: var(--background-alt) !important; /* استخدام متغير */
+}
+
+/* إضافة سهم مخصص للـ select */
+select,
+.modal select,
+.role-dropdown {
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 30px; /* مساحة للسهم */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 70px;
+  }
+  .main-center {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 260px;
+    z-index: 3000;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .main-center {
+    margin-left: 0;
+    padding: 16px;
+  }
+  .modal {
+    min-width: 300px;
+    padding: 24px;
+    margin: 16px;
+  }
+  .users-table, .leads-table, .inventory-table, .projects-table {
+    font-size: 14px;
+  }
+  .users-table th, .leads-table th, .inventory-table th, .projects-table th,
+  .users-table td, .leads-table td, .inventory-table td, .projects-table td {
+    padding: 12px 8px;
+  }
+  .dashboard-profile {
+    margin: 20px auto;
+    padding: 32px 24px 24px;
+  }
+  .profile-avatar {
+    top: -40px;
+    right: 24px;
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 32px 16px;
+    margin: 16px;
+  }
+  .modal {
+    min-width: 220px;
+    padding: 16px;
+  }
+  .add-btn, .edit-btn, .delete-btn, .view-btn, .add-user-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin: 2px;
+  }
+  .users-table, .leads-table, .inventory-table, .projects-table {
+    font-size: 12px;
+  }
+  .users-table th, .leads-table th, .inventory-table th, .projects-table th,
+  .users-table td, .leads-table td, .inventory-table td, .projects-table td {
+    padding: 8px 4px;
+  }
+}
+
+/* Animation Classes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Image Gallery Styles */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.image-thumbnail {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--border-color); /* استخدام متغير */
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.image-thumbnail:hover {
+  border-color: var(--primary-light); /* استخدام متغير */
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+/* Loading States */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(var(--text-primary-rgb),.3); /* استخدام متغير */
+  border-radius: 50%;
+  border-top-color: var(--text-primary); /* استخدام متغير */
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.p-1 { padding: 8px; }
+.p-2 { padding: 16px; }
+.p-3 { padding: 24px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-1 { gap: 8px; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }

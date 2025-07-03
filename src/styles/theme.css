@@ -1,0 +1,295 @@
+/* Light Theme Variables */
+:root {
+  --primary-color: #1d65ff;
+  --primary-light: #9b8ef0;
+  --accent-color: #00c6d7;
+  --background: #fbfbfb;
+  --background-alt: #ffffff;
+  --card-background: #ffffff;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-color: #4e4e4e2d;
+  --hover-bg: #f1f5f9;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-radius: 12px;
+
+  /* Sidebar specific */
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #0e0e0e;
+  --sidebar-text-active: #000000;
+  --sidebar-active-bg: #7575754b;
+
+  /* Table specific */
+  --table-header-bg: #2d8dcc;
+  --table-row-hover: #4492e0;
+}
+
+/* --- Dark Theme Variables --- */
+[data-theme="dark"] {
+  --primary-color: hwb(221 25% 0%);
+  --primary-light: #b8aef3;
+  --accent-color: #22d3ee;
+  --background: #222222;
+  --background-alt: #1e293b;
+  --card-background: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --hover-bg: #334155;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+
+  /* Sidebar specific */
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #cbd5e1;
+  --sidebar-text-active: #9b8ef0;
+  --sidebar-active-bg: #475569;
+
+  /* Table specific */
+  --table-header-bg: #334155;
+  --table-row-hover: #334155;
+}
+/* Apply theme to the entire page */
+body, #root {
+  background-color: var(--background);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Button Styles (Unaffected by Dark Mode) --- */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #ffffff !important; /* Text color is always white */
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Add Button: Blue */
+.btn-add {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+/* Edit Button: Indigo */
+.btn-edit {
+  background: linear-gradient(135deg, #6610f2, #4B0082);
+}
+
+/* Delete Button: Red */
+.btn-delete {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  box-shadow: var(--sidebar-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 64px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  height: 60px; /* Fixed height */
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center; /* Center the toggle button when collapsed */
+  background-color: var(--sidebar-bg);
+
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.sidebar-toggle {
+  background-color: var(--sidebar-bg);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: var(--sidebar-bg);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  margin-top: 20px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-text-active);
+  box-shadow: inset 4px 0 0 var(--primary-color);
+}
+
+.sidebar.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.link-text {
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  display: none;
+}
+
+/* Professional Theme Toggle in Sidebar */
+.sidebar-theme-section {
+  padding: 16px;
+  border-top: 1px solid var(--sidebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-theme-section {
+  justify-content: center; /* Center the toggle when collapsed */
+}
+
+.theme-toggle-label {
+  font-size: 14px;
+  color: var(--sidebar-text);
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .theme-toggle-label {
+  opacity: 0;
+  display: none;
+}
+
+/* Improved Theme Toggle Button */
+.theme-toggle {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: var(--background-alt);
+  border-radius: 13px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.theme-toggle-slider {
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transition: var(--transition);
+  transform: translateX(0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 25px;
+}
+
+[data-theme="dark"] .theme-toggle-slider {
+  transform: translateX(24px);
+  background: var(--accent-color);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #cf222e;
+  color: #cf222e;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-link:hover {
+  background: #cf222e;
+  color: white;
+}
+
+.sidebar.collapsed .logout-link span {
+  display: none;
+}
+
+tr {
+  background-color: var(--hover-bg);
+  transition: background-color 0.2s ease;
+}
+
+input {
+  color: var(--text-primary);
+}
